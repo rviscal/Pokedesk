@@ -4,7 +4,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import api from "../../config/api";
-import { CardActionArea } from "@mui/material";
+import { Box, CardActionArea, CircularProgress } from "@mui/material";
+import { useState } from "react";
 
 const boxSX = {
   display: "flex",
@@ -26,35 +27,53 @@ const cardContentdSX = {
   padding: 0,
 };
 const cardMediaSx = {
-  width: "100%",
+  width: "300px",
   objectFit: "initial",
   display: "flex",
   justifyContent: "center",
-  paddingBottom: "10px",
+  padding: "10px 10px 10px 10px",
 };
 const typographySx = {
   margin: "initial",
   borderTop: "groove",
   borderColor: "rgb(0, 0, 0, 0.1)",
   padding: "15px 0 15px 15px",
+  textTransform: "capitalize",
 };
 export default function PokemonCard({ name, url, index }) {
   const [image, setImage] = React.useState("");
+  const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
+    const getDadosPokemon = () => {
+      setLoading(true);
+      setImage("");
+
+      api.get(url).then((res) => {
+        setImage(res.data.sprites.other["dream_world"].front_default);
+        setLoading(false);
+      });
+    };
+
     getDadosPokemon();
   }, [url]);
-
-  async function getDadosPokemon() {
-    const res = await api.get(url);
-    setImage(res.data.sprites.other["dream_world"].front_default);
-  }
 
   return (
     <Card sx={boxSX} key={index}>
       <CardActionArea>
         <CardContent sx={cardContentdSX}>
-          {image && (
+          {loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                height: "100%",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
             <CardMedia
               sx={cardMediaSx}
               component="img"
@@ -63,6 +82,7 @@ export default function PokemonCard({ name, url, index }) {
               alt={name}
             />
           )}
+
           <Typography
             sx={typographySx}
             gutterBottom
