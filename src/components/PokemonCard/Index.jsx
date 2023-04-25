@@ -12,6 +12,7 @@ const boxSX = {
   justifyContent: "center",
   flexDirection: "column",
   borderRadius: 5,
+  margin:"auto",
   width: 300,
   "&:hover": {
     boxShadow: "7",

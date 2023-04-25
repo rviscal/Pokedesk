@@ -50,7 +50,6 @@ export default function Home() {
   return (
     <>
       <NavBar setPokeFilter={setPokeFilter} />
-
       <Container maxWidth="false">
         <Grid container spacing={3}>
           {pokemonFilter.map((pokemon, key) => (
